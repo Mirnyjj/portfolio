@@ -13,7 +13,7 @@ export function About() {
   ];
 
   const highlights = [
-    { icon: <Award size={20} />, text: "5+ проектов" },
+    { icon: <Award size={20} />, text: "3+ проектов" },
     { icon: <Zap size={20} />, text: "Быстрая разработка" },
     { icon: <Target size={20} />, text: "Pixel Perfect" },
   ];
@@ -82,11 +82,11 @@ export function About() {
                 />
                 <div className="relative">
                   <ImageWithFallback
-                    src="https://images.unsplash.com/photo-1737575655055-e3967cbefd03?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwcm9mZXNzaW9uYWwlMjBkZXZlbG9wZXIlMjBwb3J0cmFpdHxlbnwxfHx8fDE3Njg0MTc0MTF8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
+                    src="/my-photo.jpg"
                     alt="Максим Мирный"
                     className="relative w-64 h-64 sm:w-80 sm:h-80 object-cover rounded-2xl"
                   />
-                  {/* Floating badge */}
+
                   <motion.div
                     className="absolute -bottom-4 -right-4 bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-6 py-3 rounded-xl shadow-lg"
                     initial={{ opacity: 0, scale: 0 }}
@@ -134,7 +134,6 @@ export function About() {
                 нравятся пользователям.
               </motion.p>
 
-              {/* Highlights */}
               <div className="flex flex-wrap gap-4 mb-8">
                 {highlights.map((item, index) => (
                   <motion.div
@@ -187,7 +186,7 @@ export function About() {
               </div>
 
               <motion.a
-                href="#"
+                href="/resume.pdf"
                 className="inline-flex items-center gap-2 px-6 py-3 bg-slate-800 hover:bg-slate-700 text-slate-100 rounded-lg transition-all duration-200 border border-slate-700 hover:border-cyan-500/30 group relative overflow-hidden"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}

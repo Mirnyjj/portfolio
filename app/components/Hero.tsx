@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { motion } from "motion/react";
 import { ChevronDown } from "lucide-react";
 
@@ -13,8 +13,6 @@ type Particle = {
 };
 
 export function Hero() {
-  const [seed] = useState(() => Math.random());
-
   const scrollToProjects = () => {
     const element = document.querySelector("#projects");
     if (element) {
@@ -24,7 +22,7 @@ export function Hero() {
 
   const particles: Particle[] = useMemo(() => {
     const result: Particle[] = [];
-    let s = Math.floor(seed * 1_000_000);
+    let s = 123456;
 
     for (let i = 0; i < 20; i++) {
       s = (s * 1664525 + 1013904223) >>> 0;
@@ -49,7 +47,7 @@ export function Hero() {
     }
 
     return result;
-  }, [seed]);
+  }, []);
 
   return (
     <section

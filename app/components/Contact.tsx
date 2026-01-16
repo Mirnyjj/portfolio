@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { Mail, Github, Send, MapPin, CheckCircle2 } from "lucide-react";
+import { sendContactMessage } from "../sendContactMessage";
 
 export function Contact() {
   const [formData, setFormData] = useState({
@@ -31,13 +32,25 @@ export function Contact() {
     e.preventDefault();
     setIsSubmitting(true);
 
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    try {
+      await sendContactMessage({
+        name: formData.name,
+        email: formData.email,
+        message: formData.message,
+        projectType: formData.projectType,
+        source: "Портфолио - форма обратной связи",
+      });
 
-    setSubmitStatus("success");
-    setIsSubmitting(false);
-    setFormData({ name: "", email: "", projectType: "", message: "" });
+      setSubmitStatus("success");
+    } catch (error) {
+      console.error("Ошибка отправки:", error);
+      setSubmitStatus("error");
+    } finally {
+      setIsSubmitting(false);
+      setFormData({ name: "", email: "", projectType: "", message: "" });
 
-    setTimeout(() => setSubmitStatus("idle"), 5000);
+      setTimeout(() => setSubmitStatus("idle"), 5000);
+    }
   };
 
   const socialLinks = [
