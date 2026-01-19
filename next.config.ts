@@ -1,18 +1,5 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  output: "export",
-  trailingSlash: true,
-  images: {
-    unoptimized: true,
-  },
-  compress: true,
-  generateEtags: true,
+import type { NextConfig } from "next";
 
-  // cacheComponents: true,
+const nextConfig: NextConfig = {};
 
-  experimental: {
-    optimizeCss: true,
-  },
-};
-
-module.exports = nextConfig;
+export default nextConfig;
