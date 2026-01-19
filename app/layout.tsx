@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Script from "next/script";
-import { YandexMetrika } from "./components/YandexMetrika";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -119,23 +117,45 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-          key="json-ld"
+        />
+
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function(m,e,t,r,i,k,a){
+                m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+                m[i].l=1*new Date();
+                for (var j = 0; j < document.scripts.length; j++) {
+                  if (document.scripts[j].src === r) { return; }
+                }
+                k=e.createElement(t),a=e.getElementsByTagName(t)[0],
+                k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+              })(window, document, 'script', 'https://mc.yandex.ru/metrika/tag.js', 'ym');
+
+              ym(${process.env.YANDEX_METRIKA_ID}, 'init', {
+                ssr: true,
+                webvisor: true,
+                clickmap: true,
+                ecommerce: "dataLayer",
+                accurateTrackBounce: true,
+                trackLinks: true
+              });
+            `,
+          }}
         />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <YandexMetrika
-          counterId={process.env.YANDEX_METRIKA_ID!}
-          options={{
-            ssr: true,
-            webvisor: true,
-            clickmap: true,
-            ecommerce: "dataLayer",
-            accurateTrackBounce: true,
-            trackLinks: true,
-          }}
-        />
+        <noscript>
+          <div>
+            <img
+              src={`https://mc.yandex.ru/watch/${process.env.YANDEX_METRIKA_ID}`}
+              style={{ position: "absolute", left: "-9999px" }}
+              alt=""
+            />
+          </div>
+        </noscript>
 
         {children}
       </body>
