@@ -125,7 +125,17 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <YandexMetrika />
+        <YandexMetrika
+          counterId={process.env.YANDEX_METRIKA_ID!}
+          options={{
+            ssr: true,
+            webvisor: true,
+            clickmap: true,
+            ecommerce: "dataLayer",
+            accurateTrackBounce: true,
+            trackLinks: true,
+          }}
+        />
 
         {children}
       </body>

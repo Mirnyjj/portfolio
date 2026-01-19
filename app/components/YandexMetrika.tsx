@@ -17,23 +17,26 @@ type YandexMetrikaFunction = (
 ) => void;
 
 interface YandexMetrikaProps {
-  counterId?: string;
+  counterId: string;
   options?: {
-    clickmap?: boolean;
-    trackLinks?: boolean;
-    accurateTrackBounce?: boolean;
+    ssr?: boolean;
     webvisor?: boolean;
+    clickmap?: boolean;
     ecommerce?: string;
+    accurateTrackBounce?: boolean;
+    trackLinks?: boolean;
   };
 }
 
 export function YandexMetrika({
-  counterId = process.env.YANDEX_METRIKA_ID!,
+  counterId,
   options = {
-    clickmap: true,
-    trackLinks: true,
-    accurateTrackBounce: true,
+    ssr: true,
     webvisor: true,
+    clickmap: true,
+    ecommerce: "dataLayer",
+    accurateTrackBounce: true,
+    trackLinks: true,
   },
 }: YandexMetrikaProps) {
   useEffect(() => {
@@ -49,7 +52,7 @@ export function YandexMetrika({
         };
 
       const ymWithProps = m.ym as typeof m.ym & { l?: number };
-      ymWithProps.l = Date.now();
+      ymWithProps.l = 1 * new Date().getTime();
 
       const scripts = document.scripts;
       for (let j = 0; j < scripts.length; j++) {
@@ -63,10 +66,17 @@ export function YandexMetrika({
       k.async = true;
       k.src = r;
       a.parentNode?.insertBefore(k, a);
-    })(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+    })(
+      window,
+      document,
+      "script",
+      `https://mc.yandex.ru/metrika/tag.js?id=${counterId}`, // ✅ С ID в URL!
+      "ym",
+    );
 
     if (window.ym) {
       window.ym(counterId, "init", options);
+      console.log(`✅ Яндекс.Метрика ${counterId} инициализирована`);
     }
   }, [counterId, options]);
 
