@@ -11,13 +11,13 @@ declare global {
 }
 
 type YandexMetrikaFunction = (
-  counterId: number,
+  counterId: string,
   method: string,
   params?: Record<string, unknown>,
 ) => void;
 
 interface YandexMetrikaProps {
-  counterId?: number;
+  counterId?: string;
   options?: {
     clickmap?: boolean;
     trackLinks?: boolean;
@@ -28,7 +28,7 @@ interface YandexMetrikaProps {
 }
 
 export function YandexMetrika({
-  counterId = 106326570,
+  counterId = process.env.YANDEX_METRIKA_ID!,
   options = {
     clickmap: true,
     trackLinks: true,
