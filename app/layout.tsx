@@ -101,7 +101,7 @@ export const metadata: Metadata = {
   },
 
   verification: {
-    yandex: process.env.YANDEX_METRIKA_ID,
+    yandex: 106326570,
   },
   manifest: "/manifest.json",
 };
@@ -132,7 +132,7 @@ export default function RootLayout({
                 k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
               })(window, document, 'script', 'https://mc.yandex.ru/metrika/tag.js', 'ym');
 
-              ym(${process.env.YANDEX_METRIKA_ID}, 'init', {
+              ym(106326570, 'init', {
                 ssr: true,
                 webvisor: true,
                 clickmap: true,
@@ -150,7 +150,7 @@ export default function RootLayout({
         <noscript>
           <div>
             <img
-              src={`https://mc.yandex.ru/watch/${process.env.YANDEX_METRIKA_ID}`}
+              src="https://mc.yandex.ru/watch/106326570"
               style={{ position: "absolute", left: "-9999px" }}
               alt=""
             />
