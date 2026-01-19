@@ -7,20 +7,11 @@ const nextConfig = {
   },
   compress: true,
   generateEtags: true,
-  swcMinify: true,
 
-  async headers() {
-    return [
-      {
-        source: "/(.*)",
-        headers: [
-          {
-            key: "Cache-Control",
-            value: "public, max-age=31536000, immutable",
-          },
-        ],
-      },
-    ];
+  cacheComponents: true,
+
+  experimental: {
+    optimizeCss: true,
   },
 };
 
