@@ -9,12 +9,12 @@ const specializations = [
   "Next.js",
   "React Native",
   "Expo",
-];
+] as const;
 const highlights = [
   { icon: <Award size={20} />, text: "3+ проектов" },
   { icon: <Zap size={20} />, text: "Быстрая разработка" },
   { icon: <Target size={20} />, text: "Pixel Perfect" },
-];
+] as const;
 
 export function About() {
   return (
