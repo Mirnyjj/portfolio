@@ -1,15 +1,15 @@
 "use client";
 import { motion } from "motion/react";
 import { Download, Award, Zap, Target } from "lucide-react";
-import { ImageWithFallback } from "./figma/ImageWithFallback";
+import { ImageWithFallback } from "./ImageWithFallback";
 
 export function About() {
   const specializations = [
     "React",
     "TypeScript",
     "Next.js",
-    "Responsive Design",
-    "Performance Optimization",
+    "React Native",
+    "Expo",
   ];
 
   const highlights = [

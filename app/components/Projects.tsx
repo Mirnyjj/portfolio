@@ -3,14 +3,14 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { ExternalLink, Code2, Star } from "lucide-react";
-import { ImageWithFallback } from "./figma/ImageWithFallback";
+import { ImageWithFallback } from "./ImageWithFallback";
 import { getProjects } from "@/sanity/lib/sanity";
 import { SanityProject } from "../types";
 import { urlFor } from "@/sanity/lib/image";
 
 type FilterType =
   | "All"
-  | "lending"
+  | "landing"
   | "e-commerce"
   | "web-app"
   | "redesign"
@@ -22,7 +22,7 @@ export function Projects({
   initialProjects?: SanityProject[];
 }) {
   const [projects, setProjects] = useState<SanityProject[]>(
-    initialProjects || []
+    initialProjects || [],
   );
   const [activeFilter, setActiveFilter] = useState<FilterType>("All");
   const [hoveredProject, setHoveredProject] = useState<string | null>(null);
@@ -47,7 +47,7 @@ export function Projects({
 
   const filters: FilterType[] = [
     "All",
-    "lending",
+    "landing",
     "e-commerce",
     "web-app",
     "redesign",
@@ -162,7 +162,7 @@ export function Projects({
                       delay: index * 0.1,
                       layout: { duration: 0.3 },
                     }}
-                    className="group relative bg-gradient-to-br from-slate-900/80 to-slate-950/80 backdrop-blur-sm rounded-xl overflow-hidden border border-slate-800/50 hover:border-cyan-500/60 hover:shadow-2xl hover:shadow-cyan-500/30 transition-all duration-500 cursor-pointer"
+                    className="group relative bg-gradient-to-br from-slate-900/80 to-slate-950/80 backdrop-blur-sm rounded-xl overflow-hidden border border-slate-800/50 hover:border-cyan-500/60 hover:shadow-2xl hover:shadow-cyan-500/30 transition-all duration-500 cursor-pointer flex flex-col h-full"
                     onHoverStart={() => setHoveredProject(project._id)}
                     onHoverEnd={() => setHoveredProject(null)}
                     whileHover={{ y: -8, scale: 1.02 }}
@@ -183,7 +183,7 @@ export function Projects({
                       </motion.div>
                     )}
 
-                    <div className="relative h-48 overflow-hidden rounded-t-xl">
+                    <div className="relative h-48 overflow-hidden rounded-t-xl flex-shrink-0">
                       <motion.div
                         animate={{
                           scale: hoveredProject === project._id ? 1.15 : 1,
@@ -227,47 +227,50 @@ export function Projects({
                       />
                     </div>
 
-                    <div className="p-6">
-                      <motion.h3
-                        className="text-xl font-bold mb-3 text-white leading-tight line-clamp-2"
-                        animate={{
-                          color:
-                            hoveredProject === project._id
-                              ? "#22d3ee"
-                              : "#f8fafc",
-                        }}
-                      >
-                        {project.title}
-                      </motion.h3>
+                    <div className="flex-1 flex flex-col p-6">
+                      <div className="flex flex-col flex-1 mb-6">
+                        <motion.h3
+                          className="text-xl font-bold mb-3 text-white leading-tight line-clamp-2"
+                          animate={{
+                            color:
+                              hoveredProject === project._id
+                                ? "#22d3ee"
+                                : "#f8fafc",
+                          }}
+                        >
+                          {project.title}
+                        </motion.h3>
 
-                      <p className="text-slate-400 mb-6 leading-relaxed line-clamp-3">
-                        {project.description}
-                      </p>
+                        <p className="text-slate-400 mb-6 leading-relaxed line-clamp-3 flex-1">
+                          {project.description}
+                        </p>
 
-                      <div className="flex flex-wrap gap-2 mb-6">
-                        {project.technologies
-                          ?.slice(0, 5)
-                          .map((tech, techIndex) => (
-                            <motion.span
-                              key={`${project._id}-${tech}`}
-                              className="px-3 py-1.5 bg-slate-800/70 backdrop-blur-sm text-cyan-400 text-xs font-medium rounded-full border border-cyan-500/40 hover:border-cyan-400/70 hover:bg-cyan-500/10 transition-all duration-200 shadow-sm"
-                              initial={{ opacity: 0, scale: 0.9 }}
-                              animate={{ opacity: 1, scale: 1 }}
-                              transition={{
-                                delay: index * 0.08 + techIndex * 0.02,
-                              }}
-                              whileHover={{
-                                scale: 1.08,
-                                boxShadow: "0 4px 12px rgba(34, 211, 238, 0.3)",
-                                y: -1,
-                              }}
-                            >
-                              {tech}
-                            </motion.span>
-                          ))}
+                        <div className="flex flex-wrap gap-2">
+                          {project.technologies
+                            ?.slice(0, 5)
+                            .map((tech, techIndex) => (
+                              <motion.span
+                                key={`${project._id}-${tech}`}
+                                className="px-3 py-1.5 bg-slate-800/70 backdrop-blur-sm text-cyan-400 text-xs font-medium rounded-full border border-cyan-500/40 hover:border-cyan-400/70 hover:bg-cyan-500/10 transition-all duration-200 shadow-sm"
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                transition={{
+                                  delay: index * 0.08 + techIndex * 0.02,
+                                }}
+                                whileHover={{
+                                  scale: 1.08,
+                                  boxShadow:
+                                    "0 4px 12px rgba(34, 211, 238, 0.3)",
+                                  y: -1,
+                                }}
+                              >
+                                {tech}
+                              </motion.span>
+                            ))}
+                        </div>
                       </div>
 
-                      <div className="flex gap-3 pt-4 border-t border-slate-800/50">
+                      <div className="flex gap-3 pt-4 border-t border-slate-800/50 mt-auto">
                         {project.liveUrl && (
                           <motion.a
                             href={project.liveUrl}
