@@ -8,7 +8,7 @@ const nextConfig = {
   compress: true,
   generateEtags: true,
 
-  cacheComponents: true,
+  // cacheComponents: true,
 
   experimental: {
     optimizeCss: true,
