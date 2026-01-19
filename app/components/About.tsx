@@ -3,21 +3,20 @@ import { motion } from "motion/react";
 import { Download, Award, Zap, Target } from "lucide-react";
 import { ImageWithFallback } from "./ImageWithFallback";
 
+const specializations = [
+  "React",
+  "TypeScript",
+  "Next.js",
+  "React Native",
+  "Expo",
+];
+const highlights = [
+  { icon: <Award size={20} />, text: "3+ проектов" },
+  { icon: <Zap size={20} />, text: "Быстрая разработка" },
+  { icon: <Target size={20} />, text: "Pixel Perfect" },
+];
+
 export function About() {
-  const specializations = [
-    "React",
-    "TypeScript",
-    "Next.js",
-    "React Native",
-    "Expo",
-  ];
-
-  const highlights = [
-    { icon: <Award size={20} />, text: "3+ проектов" },
-    { icon: <Zap size={20} />, text: "Быстрая разработка" },
-    { icon: <Target size={20} />, text: "Pixel Perfect" },
-  ];
-
   return (
     <section
       id="about"
