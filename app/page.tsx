@@ -31,3 +31,4 @@ async function ProjectsWrapper() {
   const data = await getProjects();
   return <Projects initialProjects={data} />;
 }
+export const revalidate = 30;

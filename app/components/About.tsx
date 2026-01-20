@@ -1,7 +1,8 @@
 "use client";
 import { motion } from "motion/react";
-import { Download, Award, Zap, Target } from "lucide-react";
 import { ImageWithFallback } from "./ImageWithFallback";
+import { Download } from "../../lib/icons";
+import dynamic from "next/dynamic";
 
 const specializations = [
   "React",
@@ -10,11 +11,48 @@ const specializations = [
   "React Native",
   "Expo",
 ] as const;
-const highlights = [
-  { icon: <Award size={20} />, text: "3+ проектов" },
-  { icon: <Zap size={20} />, text: "Быстрая разработка" },
-  { icon: <Target size={20} />, text: "Pixel Perfect" },
-] as const;
+
+const SkillsSection = dynamic(() => import("./SkillsSection"), {
+  ssr: false,
+  loading: () => (
+    <div className="mb-8">
+      <h3 className="text-sm uppercase tracking-wider text-slate-500 mb-4">
+        Ключевые навыки
+      </h3>
+      <div className="flex flex-wrap gap-3">
+        {specializations.slice(0, 2).map((spec) => (
+          <span
+            key={spec}
+            className="px-4 py-2 bg-slate-800/50 border border-cyan-500/20 rounded-full text-sm text-cyan-400"
+          >
+            {spec}
+          </span>
+        ))}
+      </div>
+    </div>
+  ),
+});
+
+const HighlightsSection = dynamic(() => import("./HighlightsSection"), {
+  ssr: false,
+  loading: () => (
+    <div className="flex flex-wrap gap-4 mb-8">
+      <div className="flex items-center gap-2 px-4 py-2 bg-slate-800/70 rounded-lg border border-cyan-500/20">
+        <span className="text-cyan-400">⭐</span>
+        <span className="text-slate-300 text-sm">3+ проектов</span>
+      </div>
+    </div>
+  ),
+});
+
+const AvailableBadge = dynamic(() => import("./AvailableBadge"), {
+  ssr: false,
+  loading: () => (
+    <div className="absolute -bottom-4 -right-4 bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-6 py-3 rounded-xl shadow-lg">
+      <p className="text-sm font-semibold">Available for work</p>
+    </div>
+  ),
+});
 
 export function About() {
   return (
@@ -86,18 +124,7 @@ export function About() {
                     className="relative w-64 h-64 sm:w-80 sm:h-80 object-cover rounded-2xl"
                   />
 
-                  <motion.div
-                    className="absolute -bottom-4 -right-4 bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-6 py-3 rounded-xl shadow-lg"
-                    initial={{ opacity: 0, scale: 0 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: 0.8 }}
-                    animate={{
-                      y: [0, -10, 0],
-                    }}
-                  >
-                    <p className="text-sm font-semibold">Available for work</p>
-                  </motion.div>
+                  <AvailableBadge />
                 </div>
               </motion.div>
             </motion.div>
@@ -133,56 +160,9 @@ export function About() {
                 нравятся пользователям.
               </motion.p>
 
-              <div className="flex flex-wrap gap-4 mb-8">
-                {highlights.map((item, index) => (
-                  <motion.div
-                    key={index}
-                    className="flex items-center gap-2 px-4 py-2 bg-slate-800/70 rounded-lg border border-cyan-500/20"
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.3, delay: 0.6 + index * 0.1 }}
-                    whileHover={{
-                      scale: 1.05,
-                      borderColor: "rgb(34 211 238 / 0.4)",
-                    }}
-                  >
-                    <span className="text-cyan-400">{item.icon}</span>
-                    <span className="text-slate-300 text-sm">{item.text}</span>
-                  </motion.div>
-                ))}
-              </div>
+              <HighlightsSection />
 
-              <div className="mb-8">
-                <motion.h3
-                  className="text-sm uppercase tracking-wider text-slate-500 mb-4"
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: 0.7 }}
-                >
-                  Ключевые навыки
-                </motion.h3>
-                <div className="flex flex-wrap gap-3">
-                  {specializations.map((spec, index) => (
-                    <motion.span
-                      key={spec}
-                      className="px-4 py-2 bg-slate-800/50 border border-cyan-500/20 rounded-full text-sm text-cyan-400 hover:bg-slate-800 hover:border-cyan-500/40 transition-all duration-200 cursor-pointer"
-                      initial={{ opacity: 0, scale: 0.8, rotateX: -90 }}
-                      whileInView={{ opacity: 1, scale: 1, rotateX: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.5, delay: 0.8 + index * 0.1 }}
-                      whileHover={{
-                        scale: 1.1,
-                        y: -5,
-                        boxShadow: "0 10px 30px rgba(34, 211, 238, 0.3)",
-                      }}
-                    >
-                      {spec}
-                    </motion.span>
-                  ))}
-                </div>
-              </div>
+              <SkillsSection />
 
               <motion.a
                 href="/resume.pdf"

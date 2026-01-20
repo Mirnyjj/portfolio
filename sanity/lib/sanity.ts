@@ -1,7 +1,6 @@
 import { SanityProject } from "@/app/types";
 import { client } from "./client";
 
-// Получение всех проектов
 export async function getProjects(): Promise<SanityProject[]> {
   return client.fetch(
     `*[_type == "project"] | order(featured desc, _createdAt desc) {
@@ -15,7 +14,7 @@ export async function getProjects(): Promise<SanityProject[]> {
       codeUrl,
       featured,
       image,
-    }`
+    }`,
   ) as Promise<SanityProject[]>;
 }
 
@@ -33,7 +32,7 @@ export async function getProject(slug: string): Promise<SanityProject | null> {
       featured,
       image,
     }`,
-    { slug }
+    { slug },
   )) as SanityProject | null;
 
   return result;
