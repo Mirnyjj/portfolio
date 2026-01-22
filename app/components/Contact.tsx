@@ -16,11 +16,11 @@ export function Contact() {
   const [submitStatus, setSubmitStatus] = useState<
     "idle" | "success" | "error"
   >("idle");
-
+  const [consentAgreed, setConsentAgreed] = useState(false);
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
+    >,
   ) => {
     setFormData({
       ...formData,
@@ -243,10 +243,48 @@ export function Contact() {
                     whileFocus={{ scale: 1.02 }}
                   />
                 </motion.div>
+                <div className="flex items-start gap-4 p-4">
+                  <label className="flex items-center gap-3 cursor-pointer w-full">
+                    <input
+                      type="checkbox"
+                      id="consent"
+                      name="consent"
+                      checked={consentAgreed}
+                      onChange={(e) => setConsentAgreed(e.target.checked)}
+                      disabled={isSubmitting}
+                      required
+                      className="
+        w-5 h-5
+        rounded
+        border-2 border-slate-600
+        bg-slate-800
+        text-pink-500
+        focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 focus:ring-offset-slate-900
+        disabled:opacity-50 disabled:cursor-not-allowed
+      "
+                    />
+                    <span className="text-sm text-slate-400 leading-normal">
+                      Согласен(-на) на обработку персональных данных и{" "}
+                      <a
+                        href="/privacy"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="
+          text-pink-400
+          hover:text-pink-300
+          underline underline-offset-4
+          font-medium
+        "
+                      >
+                        политику конфиденциальности
+                      </a>
+                    </span>
+                  </label>
+                </div>
 
                 <motion.button
                   type="submit"
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || !consentAgreed}
                   className="w-full px-6 py-4 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-lg font-semibold hover:from-cyan-600 hover:to-blue-600 transition-all duration-300 shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40 disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden group"
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -416,7 +454,6 @@ export function Contact() {
         </motion.div>
       </div>
 
-      {/* Footer */}
       <motion.div
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
