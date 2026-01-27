@@ -26,19 +26,25 @@ const jsonLd = {
   knowsAbout: [
     "React",
     "Next.js",
-    "1С Битрикс",
+    "1С",
     "ИИ чатботы",
     "Tailwind CSS",
     "Framer Motion",
   ],
-  areaServed: ["Россия", "Москва", "Самара", "СПб"],
+  addressCountry: "RU",
+  addressRegion: "Самара",
+  areaServed: ["Россия", "Самара", "Москва", "СПб", "Казань"],
 };
 
 export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_DOMAIN || "http://localhost:3000",
   ),
-
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/icon-32.jpg",
+    apple: "/icon-192.jpg",
+  },
   title: {
     default: "Frontend разработчик Россия — React, Next.js, 1С, ИИ",
     template: "%s | Frontend разработка Россия 2026",
@@ -119,7 +125,7 @@ export default function RootLayout({
         <meta name="theme-color" content="#10b981" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
         <link rel="apple-touch-icon" sizes="192x192" href="/icon-192.jpg" />
         <link rel="icon" type="image/png" sizes="32x32" href="/icon-32.jpg" />
         <link rel="icon" type="image/png" sizes="16x16" href="/icon-16.jpg" />
