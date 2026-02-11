@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { CookieConsent } from "./components/CookieConsent";
+import { siteMetadata } from "@/lib/metadata";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,22 +16,33 @@ const geistMono = Geist_Mono({
 
 const jsonLd = {
   "@context": "https://schema.org",
-  "@type": "Person",
   name: "Максим",
-  jobTitle: "Frontend разработчик",
+  worksFor: {
+    "@type": "Organization",
+    name: "Frontend Studio Russia",
+  },
+  jobTitle: "Frontend / Fullstack приложений на React, Next.js",
   url: process.env.NEXT_PUBLIC_DOMAIN,
   image: `${process.env.NEXT_PUBLIC_DOMAIN}/136368953.jpg`,
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Самара",
+    addressCountry: "RU",
+  },
   description:
     "Frontend разработчик в России. Создаю современные веб-приложения на React, Next.js с интеграцией 1С, ИИ-чатботами и анимацией Framer Motion.",
   sameAs: ["https://t.me/MaksimMirnyjj", "https://github.com/Mirnyjj"],
   knowsAbout: [
-    "React",
     "Next.js",
+    "React",
+    "TypeScript",
+    "WebSockets",
+    "REST API",
     "1С",
     "ИИ чатботы",
-    "Tailwind CSS",
     "Framer Motion",
   ],
+  serviceArea: ["Россия", "Москва", "Санкт‑Петербург", "Казань", "Самара"],
   addressCountry: "RU",
   addressRegion: "Самара",
   areaServed: ["Россия", "Самара", "Москва", "СПб", "Казань"],
@@ -42,44 +54,30 @@ export const metadata: Metadata = {
   ),
   icons: {
     icon: "/favicon.ico",
-    shortcut: "/icon-32.jpg",
-    apple: "/icon-192.jpg",
+    shortcut: "favicon-32x32.png",
+    apple: "/android-chrome-192x192.png",
   },
-  title: {
-    default: "Frontend разработчик Россия — React, Next.js, 1С, ИИ",
-    template: "%s | Frontend разработка Россия 2026",
-  },
+  title: siteMetadata.title,
 
-  description:
-    "Frontend разработка в России: React, Next.js, интеграция 1С, ИИ чатботы, Tailwind CSS. Создам современный сайт под ключ для вашего бизнеса.",
+  description: siteMetadata.description,
 
-  keywords: [
-    "фронтенд разработчик",
-    "React разработчик",
-    "Next.js разработка",
-    "создание сайта",
-    "интеграция 1С",
-    "ИИ чатботы",
-    "веб разработка Москва",
-    "веб разработка Самара",
-    "сайт под ключ",
-  ],
+  keywords: siteMetadata.keywords,
 
   authors: [{ name: "Максим" }],
   creator: "Максим",
   publisher: "Frontend Developer Russia",
 
   openGraph: {
-    title: "Frontend разработчик Россия | React, Next.js, 1С, ИИ",
-    description:
-      "Создаю современные веб-приложения: React, Next.js, интеграция 1С-Битрикс, ИИ решения. Заказать разработку сайта в России.",
+    title: siteMetadata.title,
+
+    description: siteMetadata.description,
     url: process.env.NEXT_PUBLIC_DOMAIN,
     siteName: "Frontend Portfolio",
     images: [
       {
-        url: "/136368953.jpg",
-        width: 1200,
-        height: 630,
+        url: "/android-chrome-512x512.png",
+        width: 512,
+        height: 512,
         alt: "Frontend разработка веб-приложений React Next.js",
       },
     ],
@@ -89,10 +87,10 @@ export const metadata: Metadata = {
 
   twitter: {
     card: "summary_large_image",
-    title: "Frontend разработчик Россия | React, Next.js, 1С, ИИ",
-    description:
-      "React, Next.js, 1С интеграция, ИИ чатботы. Создам современный сайт под ключ.",
-    images: ["/136368953.jpg"],
+    title: siteMetadata.title,
+
+    description: siteMetadata.description,
+    images: ["/android-chrome-512x512.png"],
   },
 
   robots: {
@@ -125,11 +123,15 @@ export default function RootLayout({
         <meta name="theme-color" content="#10b981" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
-        <link rel="apple-touch-icon" sizes="192x192" href="/icon-192.jpg" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/icon-32.jpg" />
-        <link rel="icon" type="image/png" sizes="16x16" href="/icon-16.jpg" />
-        <link rel="manifest" href="/manifest.json" />
+
+        <link rel="preconnect" href="https://fonts.gstatic.com" />
+        <link
+          rel="preload"
+          href="..."
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
 
         <script
           type="application/ld+json"

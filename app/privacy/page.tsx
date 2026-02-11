@@ -6,10 +6,10 @@ import { ArrowLeft } from "lucide-react";
 
 export default function PrivacyPage() {
   return (
-    <section className="relative min-h-screen px-4 sm:px-6 lg:px-8 overflow-hidden backdrop-blur-sm">
+    <section className="relative min-h-screen px-4 sm:px-6 lg:px-8 overflow-hidden backdrop-blur-s pb-40">
       <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900/40 to-slate-950 z-0" />
 
-      <div className="relative z-10 max-w-4xl mx-auto ">
+      <div className="relative z-10 max-w-7xl mx-auto ">
         <Link
           href="/"
           className="my-10 flex items-center gap-2 text-slate-400 hover:text-cyan-400 transition-all duration-300 group"

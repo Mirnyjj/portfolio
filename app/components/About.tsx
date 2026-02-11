@@ -1,8 +1,8 @@
 "use client";
 import { motion } from "motion/react";
 import { ImageWithFallback } from "./ImageWithFallback";
-import { Download } from "../../lib/icons";
 import dynamic from "next/dynamic";
+import { Download } from "lucide-react";
 
 const specializations = [
   "React",
@@ -121,6 +121,9 @@ export function About() {
                   <ImageWithFallback
                     src="/my-photo.jpg"
                     alt="Максим Мирный"
+                    width={256}
+                    height={256}
+                    fill
                     className="relative w-64 h-64 sm:w-80 sm:h-80 object-cover rounded-2xl"
                   />
 

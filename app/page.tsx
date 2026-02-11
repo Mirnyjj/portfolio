@@ -1,12 +1,9 @@
 import { Hero } from "./components/Hero";
 import { About } from "./components/About";
-import { Projects } from "./components/Projects";
 import { Skills } from "./components/Skills";
 import { Contact } from "./components/Contact";
 import { Navigation } from "./components/Navigation";
-import { getProjects } from "@/sanity/lib/sanity";
-import { Suspense } from "react";
-import { ProjectsLoader } from "./components/ProjectsLoader";
+import { ProjectsWrapper } from "./components/ProjectsWrapper";
 
 export default async function App() {
   return (
@@ -17,9 +14,7 @@ export default async function App() {
 
       <About />
 
-      <Suspense fallback={<ProjectsLoader />}>
-        <ProjectsWrapper />
-      </Suspense>
+      <ProjectsWrapper />
 
       <Skills />
       <Contact />
@@ -27,8 +22,4 @@ export default async function App() {
   );
 }
 
-async function ProjectsWrapper() {
-  const data = await getProjects();
-  return <Projects initialProjects={data} />;
-}
 export const revalidate = 30;

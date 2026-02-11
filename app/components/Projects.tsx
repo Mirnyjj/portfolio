@@ -2,11 +2,12 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { ExternalLink, Code2, Star } from "lucide-react";
-import { ImageWithFallback } from "./ImageWithFallback";
+import { ExternalLink, Code2, Star, MoveRight } from "lucide-react";
+
 import { getProjects } from "@/sanity/lib/sanity";
 import { SanityProject } from "../types";
-import { urlFor } from "@/sanity/lib/image";
+import { ProjectImage } from "./ProjectImageLink";
+import Link from "next/link";
 
 type FilterType =
   | "All"
@@ -24,15 +25,18 @@ export function Projects({
   const [projects, setProjects] = useState<SanityProject[]>(
     initialProjects || [],
   );
+
   const [activeFilter, setActiveFilter] = useState<FilterType>("All");
   const [hoveredProject, setHoveredProject] = useState<string | null>(null);
   const [loading, setLoading] = useState(!initialProjects);
 
   useEffect(() => {
-    if (initialProjects) return;
+    // Запрашивать только если НЕТ initialProjects
+    if (initialProjects?.length !== undefined) return;
 
     async function fetchProjects() {
       try {
+        setLoading(true);
         const data = await getProjects();
         setProjects(data);
       } catch (error) {
@@ -43,7 +47,7 @@ export function Projects({
     }
 
     fetchProjects();
-  }, []);
+  }, [initialProjects]);
 
   const filters: FilterType[] = [
     "All",
@@ -61,7 +65,7 @@ export function Projects({
           return sanityCategory === activeFilter;
         });
 
-  if (loading && projects.length === 0) {
+  if (loading && !initialProjects?.length) {
     return (
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4">
@@ -162,7 +166,7 @@ export function Projects({
                       delay: index * 0.1,
                       layout: { duration: 0.3 },
                     }}
-                    className="group relative bg-gradient-to-br from-slate-900/80 to-slate-950/80 backdrop-blur-sm rounded-xl overflow-hidden border border-slate-800/50 hover:border-cyan-500/60 hover:shadow-2xl hover:shadow-cyan-500/30 transition-all duration-500 cursor-pointer flex flex-col h-full"
+                    className="group relative bg-gradient-to-br from-slate-900/80 to-slate-950/80 backdrop-blur-sm rounded-xl overflow-hidden border border-slate-800/50 hover:border-cyan-500/60 hover:shadow-2xl hover:shadow-cyan-500/30 transition-all duration-500 flex flex-col h-full"
                     onHoverStart={() => setHoveredProject(project._id)}
                     onHoverEnd={() => setHoveredProject(null)}
                     whileHover={{ y: -8, scale: 1.02 }}
@@ -183,49 +187,10 @@ export function Projects({
                       </motion.div>
                     )}
 
-                    <div className="relative h-48 overflow-hidden rounded-t-xl flex-shrink-0">
-                      <motion.div
-                        animate={{
-                          scale: hoveredProject === project._id ? 1.15 : 1,
-                        }}
-                        transition={{ duration: 0.4 }}
-                      >
-                        {project.image ? (
-                          <ImageWithFallback
-                            src={urlFor(project.image)
-                              .width(420)
-                              .height(250)
-                              .fit("crop")
-                              .quality(85)
-                              .url()}
-                            alt={project.title}
-                            className="w-full h-48 object-cover transition-transform duration-500"
-                          />
-                        ) : (
-                          <div className="w-full h-48 bg-gradient-to-br from-slate-800/80 to-slate-900/80 flex items-center justify-center rounded-t-xl border-b border-slate-700/50">
-                            <div className="text-slate-500 text-sm px-4 py-2 bg-slate-700/60 rounded-lg backdrop-blur-sm font-medium">
-                              Preview not available
-                            </div>
-                          </div>
-                        )}
-                      </motion.div>
-
-                      <motion.div
-                        className="absolute inset-0 bg-gradient-to-t from-slate-900/95 via-slate-900/60 to-transparent backdrop-blur-md"
-                        animate={{
-                          opacity: hoveredProject === project._id ? 1 : 0.85,
-                        }}
-                      />
-
-                      <motion.div
-                        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100"
-                        initial={{ x: "-100%" }}
-                        animate={{
-                          x: hoveredProject === project._id ? "100%" : "-100%",
-                        }}
-                        transition={{ duration: 0.6 }}
-                      />
-                    </div>
+                    <ProjectImage
+                      project={project}
+                      hoveredProject={hoveredProject}
+                    />
 
                     <div className="flex-1 flex flex-col p-6">
                       <div className="flex flex-col flex-1 mb-6">
@@ -269,7 +234,12 @@ export function Projects({
                             ))}
                         </div>
                       </div>
-
+                      <Link
+                        href={`/projects/${project.slug?.current}`}
+                        className="flex flex-nowrap gap-2 justify-items-center"
+                      >
+                        Подробнее <MoveRight />
+                      </Link>
                       <div className="flex gap-3 pt-4 border-t border-slate-800/50 mt-auto">
                         {project.liveUrl && (
                           <motion.a
