@@ -16,3 +16,13 @@ export interface SanityProject {
     };
   } | null;
 }
+
+export interface GeoProps {
+  ip: string;
+  country: string;
+  region: string;
+  city: string;
+  latitude: number;
+  longitude: number;
+  timezone: string;
+}
