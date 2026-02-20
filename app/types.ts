@@ -26,3 +26,19 @@ export interface GeoProps {
   longitude: number;
   timezone: string;
 }
+
+export interface GeoResApi {
+  city_name: string;
+  country_name: string;
+  latitude: string;
+  longitude: string;
+}
+export interface UserResApiGeo {
+  user: {
+    city: string;
+    country: string;
+    lat: number;
+    lng: number;
+  };
+  route: [number, number][];
+}
