@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { CookieConsent } from "./components/CookieConsent";
 import { siteMetadata } from "@/lib/metadata";
+import Footer from "./components/Footer";
+import { Header } from "./components/Header";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -167,7 +169,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-slate-950 text-slate-100`}
       >
         <noscript>
           <div>
@@ -178,9 +180,9 @@ export default function RootLayout({
             />
           </div>
         </noscript>
-
+        <Header />
         {children}
-
+        <Footer />
         <CookieConsent />
         {/* {typeof window !== "undefined" ? <CookieConsent /> : null} */}
       </body>

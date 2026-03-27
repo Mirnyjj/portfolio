@@ -1,57 +1,26 @@
 "use client";
-import React, { useState } from "react";
+import { useActionState, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { Mail, Github, Send, MapPin, CheckCircle2 } from "lucide-react";
-import { sendContactMessage } from "../sendContactMessage";
+import {
+  Mail,
+  Github,
+  Send,
+  MapPin,
+  CheckCircle2,
+  MailWarning,
+} from "lucide-react";
+import { sendContactMessage } from "../../lib/sendContactMessage";
+
+const initialState = {
+  success: false,
+};
 
 export function Contact() {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    projectType: "",
-    message: "",
-  });
-
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<
-    "idle" | "success" | "error"
-  >("idle");
+  const [state, dispatchAction, isPending] = useActionState(
+    sendContactMessage,
+    initialState,
+  );
   const [consentAgreed, setConsentAgreed] = useState(false);
-  const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >,
-  ) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-
-    try {
-      await sendContactMessage({
-        name: formData.name,
-        email: formData.email,
-        message: formData.message,
-        projectType: formData.projectType,
-        source: "Портфолио - форма обратной связи",
-      });
-
-      setSubmitStatus("success");
-    } catch (error) {
-      console.error("Ошибка отправки:", error);
-      setSubmitStatus("error");
-    } finally {
-      setIsSubmitting(false);
-      setFormData({ name: "", email: "", projectType: "", message: "" });
-
-      setTimeout(() => setSubmitStatus("idle"), 5000);
-    }
-  };
 
   const socialLinks = [
     {
@@ -138,7 +107,7 @@ export function Contact() {
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form action={dispatchAction} className="space-y-6">
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -155,8 +124,6 @@ export function Contact() {
                     type="text"
                     id="name"
                     name="name"
-                    value={formData.name}
-                    onChange={handleChange}
                     required
                     className="w-full px-4 py-3 bg-slate-800/50 border border-slate-700 rounded-lg text-slate-100 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all duration-200 backdrop-blur-sm"
                     placeholder="Ваше имя"
@@ -180,8 +147,6 @@ export function Contact() {
                     type="email"
                     id="email"
                     name="email"
-                    value={formData.email}
-                    onChange={handleChange}
                     required
                     className="w-full px-4 py-3 bg-slate-800/50 border border-slate-700 rounded-lg text-slate-100 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all duration-200 backdrop-blur-sm"
                     placeholder="your.email@example.com"
@@ -204,18 +169,16 @@ export function Contact() {
                   <motion.select
                     id="projectType"
                     name="projectType"
-                    value={formData.projectType}
-                    onChange={handleChange}
                     required
                     className="w-full px-4 py-3 bg-slate-800/50 border border-slate-700 rounded-lg text-slate-100 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all duration-200 backdrop-blur-sm"
                     whileFocus={{ scale: 1.02 }}
                   >
                     <option value="">Выберите тип проекта</option>
-                    <option value="web-app">Веб-приложение</option>
-                    <option value="e-commerce">Интернет-магазин</option>
-                    <option value="landing">Лендинг</option>
-                    <option value="redesign">Интеграции</option>
-                    <option value="other">Другое</option>
+                    <option value="Веб-приложение">Веб-приложение</option>
+                    <option value="Интернет-магазин">Интернет-магазин</option>
+                    <option value="Лендинг">Лендинг</option>
+                    <option value="Интеграции">Интеграции</option>
+                    <option value="Другое">Другое</option>
                   </motion.select>
                 </motion.div>
 
@@ -234,8 +197,6 @@ export function Contact() {
                   <motion.textarea
                     id="message"
                     name="message"
-                    value={formData.message}
-                    onChange={handleChange}
                     required
                     rows={5}
                     className="w-full px-4 py-3 bg-slate-800/50 border border-slate-700 rounded-lg text-slate-100 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all duration-200 resize-none backdrop-blur-sm"
@@ -251,7 +212,6 @@ export function Contact() {
                       name="consent"
                       checked={consentAgreed}
                       onChange={(e) => setConsentAgreed(e.target.checked)}
-                      disabled={isSubmitting}
                       required
                       className="
         w-5 h-5
@@ -284,14 +244,14 @@ export function Contact() {
 
                 <motion.button
                   type="submit"
-                  disabled={isSubmitting || !consentAgreed}
+                  disabled={isPending || !consentAgreed}
                   className="w-full px-6 py-4 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-lg font-semibold hover:from-cyan-600 hover:to-blue-600 transition-all duration-300 shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40 disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden group"
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: 0.7 }}
-                  whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
-                  whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
+                  whileHover={{ scale: isPending ? 1 : 1.02 }}
+                  whileTap={{ scale: isPending ? 1 : 0.98 }}
                 >
                   <motion.span
                     className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500"
@@ -300,12 +260,12 @@ export function Contact() {
                     transition={{ duration: 0.5 }}
                   />
                   <span className="relative z-10">
-                    {isSubmitting ? "Отправка..." : "Отправить сообщение"}
+                    {isPending ? "Отправка..." : "Отправить сообщение"}
                   </span>
                 </motion.button>
 
                 <AnimatePresence>
-                  {submitStatus === "success" && (
+                  {state?.success && (
                     <motion.div
                       initial={{ opacity: 0, y: -10, scale: 0.8 }}
                       animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -317,6 +277,17 @@ export function Contact() {
                         Сообщение успешно отправлено! Я свяжусь с вами в
                         ближайшее время.
                       </p>
+                    </motion.div>
+                  )}
+                  {state.error && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10, scale: 0.8 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.8 }}
+                      className="flex items-center gap-2 text-red-400 bg-green-400/10 border border-red-400/20 rounded-lg p-4"
+                    >
+                      <MailWarning color="red" size={20} />
+                      <p>Произошла ошибка отправки формы: {state.error}</p>
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -453,23 +424,6 @@ export function Contact() {
           </div>
         </motion.div>
       </div>
-
-      <motion.div
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6, delay: 0.4 }}
-        className="mt-20 pt-8 border-t border-slate-800 text-center text-slate-500 max-w-7xl mx-auto px-4"
-      >
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.5 }}
-        >
-          © 2026 Максим Мирный. Все права защищены.
-        </motion.p>
-      </motion.div>
     </section>
   );
 }

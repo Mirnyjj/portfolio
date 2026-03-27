@@ -2,24 +2,16 @@
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+import Link from "next/link";
 
-export function Navigation() {
-  const [isScrolled, setIsScrolled] = useState(false);
+export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
   const navLinks = [
-    { name: "About", href: "#about" },
-    { name: "Projects", href: "#projects" },
-    { name: "Skills", href: "#skills" },
-    { name: "Contact", href: "#contact" },
+    { name: "About", href: "/#about" },
+    { name: "Projects", href: "/#projects" },
+    { name: "Skills", href: "/#skills" },
+    { name: "Contact", href: "/#contact" },
   ];
 
   const scrollToSection = (href: string) => {
@@ -32,11 +24,8 @@ export function Navigation() {
 
   return (
     <motion.nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
-          ? "bg-slate-950/95 backdrop-blur-md shadow-lg shadow-cyan-500/5"
-          : "bg-transparent"
-      }`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-slate-950
+      `}
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.6, type: "spring" }}
@@ -49,11 +38,12 @@ export function Navigation() {
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
           >
-            <motion.span
+            <motion.a
               className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 bg-clip-text text-transparent"
               animate={{
                 backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
               }}
+              href="/"
               transition={{
                 duration: 3,
                 repeat: Infinity,
@@ -64,7 +54,7 @@ export function Navigation() {
               }}
             >
               MM
-            </motion.span>
+            </motion.a>
             <motion.div
               className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-cyan-400 to-blue-500"
               initial={{ scaleX: 0 }}
@@ -75,9 +65,9 @@ export function Navigation() {
 
           <div className="hidden md:flex items-center gap-8">
             {navLinks.map((link, index) => (
-              <motion.button
+              <motion.a
                 key={link.name}
-                onClick={() => scrollToSection(link.href)}
+                href={link.href}
                 className="relative text-slate-300 hover:text-cyan-400 transition-colors duration-200 group"
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -92,7 +82,7 @@ export function Navigation() {
                   whileHover={{ scaleX: 1 }}
                   transition={{ duration: 0.3 }}
                 />
-              </motion.button>
+              </motion.a>
             ))}
           </div>
 
@@ -145,13 +135,13 @@ export function Navigation() {
                 }}
               >
                 {navLinks.map((link) => (
-                  <button
+                  <Link
                     key={link.name}
-                    onClick={() => scrollToSection(link.href)}
+                    href={link.href}
                     className="block w-full text-left px-4 py-3 text-slate-300 hover:text-cyan-400 hover:bg-slate-900/50 transition-all duration-200"
                   >
                     {link.name}
-                  </button>
+                  </Link>
                 ))}
               </div>
             </motion.div>
