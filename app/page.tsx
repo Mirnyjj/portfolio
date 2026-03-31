@@ -9,11 +9,11 @@ export default async function App() {
     <div className="min-h-screen bg-slate-950 text-slate-100 mt-20">
       <Hero />
 
-      <About />
+      {/* <About />
 
       <ProjectsWrapper />
 
-      <Skills />
+      <Skills /> */}
       <Contact />
     </div>
   );
