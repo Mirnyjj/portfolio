@@ -13,7 +13,7 @@ export function Hero() {
 
   // Типографический эффект
   const name = "<Максим Мирный />";
-  const role = "Frontend Developer";
+  const role = "Разработка web и мобильных приложений под ключ";
   const [typedName, setTypedName] = useState("");
   const [typedRole, setTypedRole] = useState("");
 
@@ -45,8 +45,7 @@ export function Hero() {
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
     >
       {/* Фон */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900"></div>
+      <div className="absolute inset-0 overflow-hidden z-10">
         <SceneChaos />
       </div>
 
@@ -71,7 +70,9 @@ export function Hero() {
           </motion.h1>
 
           <motion.p className="text-xl sm:text-2xl lg:text-3xl text-gray-400 mb-4">
-            {typedRole}
+            <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 bg-clip-text text-transparent">
+              {typedRole}
+            </span>
           </motion.p>
 
           <motion.button
@@ -81,24 +82,13 @@ export function Hero() {
             whileTap={{ scale: 0.95 }}
           >
             <span className="relative z-10 flex items-center gap-2">
-              View My Work
-              <motion.span
-                animate={{ x: [0, 5, 0] }}
-                transition={{ duration: 1.5, repeat: Infinity }}
-              >
-                →
-              </motion.span>
+              Посмотреть проекты
             </span>
           </motion.button>
         </motion.div>
 
         {/* Scroll Animation */}
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center">
-          <motion.div
-            className="w-0.5 h-16 bg-cyan-500 rounded-full mb-2"
-            animate={{ y: [0, 10, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-          />
           <motion.div
             animate={{ y: [0, 10, 0], opacity: [0, 1, 0] }}
             transition={{

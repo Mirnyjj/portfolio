@@ -5,49 +5,64 @@ import { useRef, useState } from "react";
 import * as THREE from "three";
 import { Html } from "@react-three/drei";
 import { CardProps } from "@/app/types";
+import { useMouse } from "@/app/hooks/useMouse";
 
 export const Card: React.FC<CardProps> = ({
-  position,
-  rotation,
+  position: center,
   speed,
   content,
+  bgColor,
+  radius,
+  angleOffset,
 }) => {
   const ref = useRef<THREE.Group>(null);
-  const bgRef = useRef<THREE.Mesh>(null);
   const [flipped, setFlipped] = useState(false);
-
-  // анимация парения + плавный флип
+  const mouse = useMouse();
   useFrame(({ clock }) => {
+    if (!ref.current) return;
+
     const t = clock.getElapsedTime() * speed;
-    if (ref.current) {
-      // плавное парение
-      ref.current.position.x = position[0] + Math.sin(t * 0.5) * 0.3;
-      ref.current.position.y = position[1] + Math.sin(t + position[0]) * 0.5;
-      ref.current.position.z = position[2];
 
-      // вращение для эффекта флипа
-      const targetRotation = flipped ? Math.PI : 0;
-      ref.current.rotation.y += (targetRotation - ref.current.rotation.y) * 0.1;
-      ref.current.rotation.z = rotation[2] + Math.sin(t) * 0.05;
+    // восьмерка или рассредоточенное движение
+    const baseX = center[0] + radius * Math.sin(t + angleOffset);
+    const baseY =
+      center[1] +
+      radius * Math.sin(t + angleOffset) * Math.cos(t + angleOffset);
+    const baseZ = center[2] + Math.sin(t * 2 + angleOffset) * 0.5;
+
+    // координаты мыши в “плоскости XY”
+    const cursorX = mouse.x * 10; // масштаб под сцену
+    const cursorY = mouse.y * 5;
+
+    // вектор от мыши к карточке
+    const dx = baseX - cursorX;
+    const dy = baseY - cursorY;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+
+    let offsetX = 0,
+      offsetY = 0;
+
+    const influenceRadius = 2; // как близко нужно подходить, чтобы карточка убегала
+    const fleeStrength = 1; // сила убегания
+
+    if (dist < influenceRadius) {
+      const factor = (influenceRadius - dist) / influenceRadius;
+      offsetX = (dx / dist) * factor * fleeStrength;
+      offsetY = (dy / dist) * factor * fleeStrength;
     }
 
-    // мерцающий фон
-    if (bgRef.current) {
-      const r = (Math.sin(t * 1) + 1) / 2;
-      const g = (Math.sin(t * 1.3 + 2) + 1) / 2;
-      const b = (Math.sin(t * 1.7 + 4) + 1) / 2;
-      (bgRef.current.material as THREE.MeshBasicMaterial).color.setRGB(r, g, b);
-    }
+    // финальная позиция
+    ref.current.position.set(baseX + offsetX, baseY + offsetY, baseZ);
+
+    ref.current.lookAt(0, 0, 0);
+
+    const targetRotation = flipped ? Math.PI : 0;
+    ref.current.rotation.y += (targetRotation - ref.current.rotation.y) * 0.1;
+    ref.current.rotation.z = Math.sin(t * 1.5 + angleOffset) * 0.1;
   });
 
   return (
     <group ref={ref} onClick={() => setFlipped(!flipped)}>
-      {/* Фон карточки */}
-      <mesh ref={bgRef} scale={[1, 1, 1]}>
-        <planeGeometry args={[1, 1]} />
-        <meshBasicMaterial />
-      </mesh>
-
       {/* Лицевая сторона */}
       <Html
         center
@@ -60,7 +75,10 @@ export const Card: React.FC<CardProps> = ({
           backfaceVisibility: "hidden",
         }}
       >
-        <div className="w-full h-full p-2 bg-transparent rounded shadow-lg flex flex-col justify-around text-sm">
+        <div
+          className="w-full h-full p-2 rounded shadow-lg flex flex-col justify-around text-sm"
+          style={{ backgroundColor: bgColor }}
+        >
           {!flipped && content}
         </div>
       </Html>

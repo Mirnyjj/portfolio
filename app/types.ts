@@ -44,8 +44,11 @@ export interface UserResApiGeo {
 }
 
 export interface CardProps {
-  position: [number, number, number];
+  position: number[];
   rotation: [number, number, number];
   speed: number;
+  radius: number;
+  angleOffset: number;
   content: React.ReactNode;
+  bgColor: string;
 }
