@@ -42,3 +42,10 @@ export interface UserResApiGeo {
   };
   route: [number, number][];
 }
+
+export interface CardProps {
+  position: [number, number, number];
+  rotation: [number, number, number];
+  speed: number;
+  content: React.ReactNode;
+}

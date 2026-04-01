@@ -1,51 +1,15 @@
 "use client";
 
-import { useMemo, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "motion/react";
 import { ChevronDown } from "lucide-react";
-
-type Particle = {
-  id: number;
-  x: number;
-  y: number;
-  delay: number;
-  duration: number;
-};
+import SceneChaos from "./hero/SceneChaos";
 
 export function Hero() {
   const scrollToProjects = () => {
     const element = document.querySelector("#projects");
     if (element) element.scrollIntoView({ behavior: "smooth" });
   };
-
-  const particles: Particle[] = useMemo(() => {
-    const result: Particle[] = [];
-    let s = 123456;
-
-    for (let i = 0; i < 20; i++) {
-      s = (s * 1664525 + 1013904223) >>> 0;
-      const r1 = s / 4294967296;
-
-      s = (s * 1664525 + 1013904223) >>> 0;
-      const r2 = s / 4294967296;
-
-      s = (s * 1664525 + 1013904223) >>> 0;
-      const r3 = s / 4294967296;
-
-      s = (s * 1664525 + 1013904223) >>> 0;
-      const r4 = s / 4294967296;
-
-      result.push({
-        id: i,
-        x: r1 * 100,
-        y: r2 * 100,
-        delay: r3 * 2,
-        duration: 3 + r4 * 4,
-      });
-    }
-
-    return result;
-  }, []);
 
   // Типографический эффект
   const name = "<Максим Мирный />";
@@ -83,20 +47,7 @@ export function Hero() {
       {/* Фон */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900"></div>
-        {particles.map((p) => (
-          <motion.div
-            key={p.id}
-            className="absolute w-1 h-1 bg-cyan-400/30 rounded-full"
-            style={{ left: `${p.x}%`, top: `${p.y}%` }}
-            animate={{ y: [0, -50, 0], opacity: [0, 1, 0] }}
-            transition={{
-              duration: p.duration,
-              repeat: Infinity,
-              delay: p.delay,
-              ease: "easeInOut",
-            }}
-          />
-        ))}
+        <SceneChaos />
       </div>
 
       {/* Контент */}
