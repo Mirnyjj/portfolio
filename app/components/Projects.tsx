@@ -3,11 +3,10 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { ExternalLink, Code2, Star, MoveRight } from "lucide-react";
-
-import { getProjects } from "@/sanity/lib/sanity";
 import { SanityProject } from "../types";
 import { ProjectImage } from "./ProjectImageLink";
 import Link from "next/link";
+import { ProjectCard } from "./ui/ProjectCard";
 
 type FilterType =
   | "All"
@@ -30,25 +29,6 @@ export function Projects({
   const [hoveredProject, setHoveredProject] = useState<string | null>(null);
   const [loading, setLoading] = useState(!initialProjects);
 
-  useEffect(() => {
-    // Запрашивать только если НЕТ initialProjects
-    if (initialProjects?.length !== undefined) return;
-
-    async function fetchProjects() {
-      try {
-        setLoading(true);
-        const data = await getProjects();
-        setProjects(data);
-      } catch (error) {
-        console.error("Error fetching projects:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchProjects();
-  }, [initialProjects]);
-
   const filters: FilterType[] = [
     "All",
     "landing",
@@ -57,234 +37,60 @@ export function Projects({
     "redesign",
     "other",
   ];
-  const filteredProjects =
-    activeFilter === "All"
-      ? projects
-      : projects.filter((project) => {
-          const sanityCategory = project.category;
-          return sanityCategory === activeFilter;
-        });
-
-  if (loading && !initialProjects?.length) {
-    return (
-      <section className="py-20">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-500 mx-auto mb-4"></div>
-            <p className="text-slate-400">Загружаем проекты...</p>
-          </div>
-        </div>
-      </section>
-    );
-  }
 
   return (
     <>
-      <section
-        id="projects"
-        className="py-20 lg:py-32 bg-slate-950 relative overflow-hidden"
-      >
-        <motion.div
-          className="absolute top-40 left-0 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl"
-          animate={{
-            scale: [1, 1.3, 1],
-            x: [0, 100, 0],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <motion.h2
-              className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-12 text-center"
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-            >
-              Избранные{" "}
-              <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
-                Проекты
-              </span>
-            </motion.h2>
-
-            <div className="flex flex-wrap justify-center gap-3 mb-12">
-              {filters.map((filter, index) => (
-                <motion.button
-                  key={filter}
-                  onClick={() => setActiveFilter(filter)}
-                  className={`px-5 py-2 rounded-lg font-medium transition-all duration-300 relative overflow-hidden ${
-                    activeFilter === filter
-                      ? "text-white shadow-lg shadow-cyan-500/25"
-                      : "bg-slate-800 text-slate-300 hover:bg-slate-700 hover:shadow-lg hover:shadow-slate-500/25"
-                  }`}
-                  initial={{ opacity: 0, y: -20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, delay: index * 0.1 }}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  {activeFilter === filter && (
-                    <motion.div
-                      className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-500"
-                      layoutId="activeFilter"
-                      transition={{
-                        type: "spring",
-                        stiffness: 300,
-                        damping: 30,
-                      }}
-                    />
-                  )}
-                  <span className="relative z-10">{filter}</span>
-                </motion.button>
-              ))}
-            </div>
-
-            <motion.div
-              layout
-              className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8"
-            >
-              <AnimatePresence mode="popLayout">
-                {filteredProjects.map((project, index) => (
-                  <motion.div
-                    key={project._id}
-                    layout
-                    initial={{ opacity: 0, scale: 0.8, rotateY: -15 }}
-                    animate={{ opacity: 1, scale: 1, rotateY: 0 }}
-                    exit={{ opacity: 0, scale: 0.8, rotateY: 15 }}
-                    transition={{
-                      duration: 0.5,
-                      delay: index * 0.1,
-                      layout: { duration: 0.3 },
-                    }}
-                    className="group relative bg-gradient-to-br from-slate-900/80 to-slate-950/80 backdrop-blur-sm rounded-xl overflow-hidden border border-slate-800/50 hover:border-cyan-500/60 hover:shadow-2xl hover:shadow-cyan-500/30 transition-all duration-500 flex flex-col h-full"
-                    onHoverStart={() => setHoveredProject(project._id)}
-                    onHoverEnd={() => setHoveredProject(null)}
-                    whileHover={{ y: -8, scale: 1.02 }}
-                    style={{
-                      transformStyle: "preserve-3d",
-                      perspective: "1000px",
-                    }}
-                  >
-                    {project.featured && (
-                      <motion.div
-                        className="absolute top-4 right-4 z-20 bg-gradient-to-r from-yellow-400/95 to-orange-500/95 text-black px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1 shadow-lg shadow-yellow-500/40 backdrop-blur-sm border border-yellow-400/50"
-                        initial={{ opacity: 0, scale: 0 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: 0.2 }}
-                      >
-                        <Star size={12} fill="currentColor" />
-                        Featured
-                      </motion.div>
-                    )}
-
-                    <ProjectImage
-                      project={project}
-                      hoveredProject={hoveredProject}
-                    />
-
-                    <div className="flex-1 flex flex-col p-6">
-                      <div className="flex flex-col flex-1 mb-6">
-                        <motion.h3
-                          className="text-xl font-bold mb-3 text-white leading-tight line-clamp-2"
-                          animate={{
-                            color:
-                              hoveredProject === project._id
-                                ? "#22d3ee"
-                                : "#f8fafc",
-                          }}
-                        >
-                          {project.title}
-                        </motion.h3>
-
-                        <p className="text-slate-400 mb-6 leading-relaxed line-clamp-3 flex-1">
-                          {project.description}
-                        </p>
-
-                        <div className="flex flex-wrap gap-2">
-                          {project.technologies
-                            ?.slice(0, 5)
-                            .map((tech, techIndex) => (
-                              <motion.span
-                                key={`${project._id}-${tech}`}
-                                className="px-3 py-1.5 bg-slate-800/70 backdrop-blur-sm text-cyan-400 text-xs font-medium rounded-full border border-cyan-500/40 hover:border-cyan-400/70 hover:bg-cyan-500/10 transition-all duration-200 shadow-sm"
-                                initial={{ opacity: 0, scale: 0.9 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                transition={{
-                                  delay: index * 0.08 + techIndex * 0.02,
-                                }}
-                                whileHover={{
-                                  scale: 1.08,
-                                  boxShadow:
-                                    "0 4px 12px rgba(34, 211, 238, 0.3)",
-                                  y: -1,
-                                }}
-                              >
-                                {tech}
-                              </motion.span>
-                            ))}
-                        </div>
-                      </div>
-                      <Link
-                        href={`/projects/${project.slug?.current}`}
-                        className="flex flex-nowrap gap-2 justify-items-center"
-                      >
-                        Подробнее <MoveRight />
-                      </Link>
-                      <div className="flex gap-3 pt-4 border-t border-slate-800/50 mt-auto">
-                        {project.liveUrl && (
-                          <motion.a
-                            href={project.liveUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex-1 flex items-center justify-center gap-2 px-5 py-3 bg-gradient-to-r from-cyan-500/90 to-blue-500/90 hover:from-cyan-400 hover:to-blue-400 text-white font-semibold rounded-lg relative overflow-hidden shadow-lg shadow-cyan-500/30 hover:shadow-xl hover:shadow-cyan-500/50 backdrop-blur-sm border border-cyan-500/30 transition-all duration-300 group"
-                            whileHover={{ scale: 1.03 }}
-                            whileTap={{ scale: 0.97 }}
-                          >
-                            <motion.span
-                              className="absolute inset-0 bg-gradient-to-r from-blue-500/90 to-purple-500/90 backdrop-blur-sm"
-                              initial={{ scaleX: 0, scaleY: 0.8 }}
-                              whileHover={{ scaleX: 1, scaleY: 1 }}
-                              transition={{ duration: 0.3, ease: "easeOut" }}
-                            />
-                            <ExternalLink
-                              size={16}
-                              className="relative z-10 flex-shrink-0"
-                            />
-                            <span className="relative z-10">Live Demo</span>
-                          </motion.a>
-                        )}
-
-                        {project.codeUrl && (
-                          <motion.a
-                            href={project.codeUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex-1 flex items-center justify-center gap-2 px-5 py-3 bg-slate-800/70 hover:bg-slate-700/90 text-slate-300 hover:text-slate-100 font-semibold rounded-lg backdrop-blur-sm border border-slate-700/50 hover:border-slate-500/70 hover:shadow-xl hover:shadow-slate-500/30 transition-all duration-300 shadow-lg"
-                            whileHover={{ scale: 1.03 }}
-                            whileTap={{ scale: 0.97 }}
-                          >
-                            <Code2 size={16} className="flex-shrink-0" />
-                            <span>View Code</span>
-                          </motion.a>
-                        )}
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
-              </AnimatePresence>
-            </motion.div>
-          </motion.div>
-        </div>
+      <section id="projects" className="py-20 lg:py-32 relative ">
+        <ProjectCard
+          title="Digital Revolution"
+          src="/images/service1.png"
+          description="The Future of Technology"
+          classNameExpanded="[&_h4]:text-black dark:[&_h4]:text-white [&_h4]:font-medium"
+        >
+          <h4>The Rise of Artificial Intelligence</h4>
+          <p>
+            In the heart of Silicon Valley, a revolution is quietly unfolding.
+            Artificial Intelligence, once the stuff of science fiction, has
+            become the driving force behind the most transformative technologies
+            of our time. From autonomous vehicles navigating city streets to
+            AI-powered medical diagnostics saving lives, the boundaries between
+            human and machine intelligence are blurring in ways we never
+            imagined possible.
+          </p>
+          <h4>The Quantum Computing Breakthrough</h4>
+          <p>
+            Deep within the research labs of tech giants and universities,
+            scientists are racing to harness the power of quantum mechanics.
+            Quantum computers, with their ability to process information in
+            multiple states simultaneously, promise to solve problems that would
+            take classical computers millennia to crack. From drug discovery to
+            climate modeling, the applications are limitless. The first
+            commercially viable quantum computer could revolutionize
+            cryptography, financial modeling, and our understanding of the
+            universe itself.
+          </p>
+          <h4>The Internet of Everything</h4>
+          <p>
+            Our world is becoming increasingly connected. Smart cities are
+            emerging, where traffic lights communicate with cars, streetlights
+            adjust based on pedestrian flow, and waste management systems
+            optimize collection routes in real-time. The Internet of Things
+            (IoT) is evolving into the Internet of Everything, creating a
+            seamless network of devices, sensors, and systems that work together
+            to make our lives more efficient and sustainable.
+          </p>
+          <h4>The Future of Human-Machine Collaboration</h4>
+          <p>
+            As we stand on the precipice of this technological revolution, the
+            question isn't whether machines will replace humans, but how we can
+            best collaborate with them. Augmented reality is enhancing our
+            perception of the world, while brain-computer interfaces are
+            creating new ways for us to interact with technology. The future
+            belongs to those who can harness the power of human creativity and
+            machine precision, working together to solve the greatest challenges
+            facing humanity.
+          </p>
+        </ProjectCard>
       </section>
     </>
   );

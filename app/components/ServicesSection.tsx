@@ -1,6 +1,7 @@
 "use client";
 
-import { motion } from "motion/react";
+import { Heart } from "lucide-react";
+import { CardSticky, ContainerScroll } from "./ui/ServiceCard";
 
 interface Service {
   title: string;
@@ -80,65 +81,84 @@ const services: Service[] = [
   },
 ];
 
-export default function ServicesSection() {
+export const ServicesSection = () => {
   return (
-    <section className="relative py-24 text-white overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mb-16">
-        <h2 className="text-gray-200 text-4xl sm:text-5xl font-extrabold mb-4">
-          Мои услуги
-        </h2>
-        <p className="text-gray-400 text-lg sm:text-xl">
-          Комплексные решения для вашего бизнеса: сайты, мобильные приложения и
-          сопровождение.
-        </p>
+    <div className="container min-h-svh place-content-center  px-6 text-white xl:px-12">
+      <div className="grid md:grid-cols-2 md:gap-8 xl:gap-12 my-20">
+        <div className="md:sticky top-20 self-start">
+          <h2 className="mb-6 mt-4 text-4xl font-bold tracking-tight">
+            Ознакомьтесь с услугами
+          </h2>
+          <p className="max-w-full text-lg text-gray-200 mb-4 indent-8 text-justify">
+            Я предлагаю{" "}
+            <strong>
+              полный спектр услуг по созданию сайтов, мобильных приложений и
+              поддержке проектов
+            </strong>
+            , чтобы ваш бизнес не просто существовал, а активно развивался и
+            привлекал клиентов.
+          </p>
+          <ul className="max-w-prose text-justify text-lg text-gray-200 list-disc list-inside space-y-2">
+            <li>
+              <strong>Анализ и планирование:</strong> изучаем цели проекта и
+              аудиторию, чтобы определить оптимальную стратегию.
+            </li>
+            <li>
+              <strong>Проектирование и дизайн:</strong> создаю прототипы и
+              визуальный стиль, который будет удобен пользователям и отражать
+              ваш бренд.
+            </li>
+            <li>
+              <strong>Разработка:</strong> пишу функциональный и безопасный код
+              для веба и мобильных платформ, интегрирую необходимые сервисы.
+            </li>
+            <li>
+              <strong>Тестирование и отладка:</strong> проверяю проект на всех
+              устройствах и устраняю ошибки.
+            </li>
+            <li>
+              <strong>Запуск и сопровождение:</strong> публикую проект,
+              настраиваю аналитику и предоставлю поддержку.
+            </li>
+          </ul>
+        </div>
+
+        <ContainerScroll className="relative flex flex-col gap-8 my-20">
+          {services.map((service, index) => (
+            <CardSticky
+              key={service.title}
+              index={index + 2}
+              className="rounded-2xl border p-8 shadow-md backdrop-blur-md "
+            >
+              <div className="flex items-center justify-between gap-4">
+                <h2 className="my-6 text-xl font-bold tracking-tighter text-gray-200">
+                  {service.title}
+                </h2>
+                <h3 className="text-2xl font-bold text-indigo-500">
+                  {service.popular && (
+                    <Heart color="purple" className="animate-pulse" size={30} />
+                  )}
+                </h3>
+              </div>
+
+              {/* Услуги */}
+              <ul className="mb-4 list-disc list-inside space-y-1 text-gray-300">
+                {service.includes.map((item, i) => (
+                  <li key={i}>{item}</li>
+                ))}
+              </ul>
+
+              {/* Длительность и цена */}
+              <div className="flex flex-wrap gap-4 text-white">
+                <span className="font-medium">{service.duration}</span>
+                <span className="font-semibold text-indigo-500">
+                  {service.price}
+                </span>
+              </div>
+            </CardSticky>
+          ))}
+        </ContainerScroll>
       </div>
-
-      <motion.div
-        className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 px-4 sm:px-6 lg:px-8"
-        initial="hidden"
-        animate="visible"
-        variants={{
-          visible: { transition: { staggerChildren: 0.1 } },
-        }}
-      >
-        {services.map((service, i) => (
-          <motion.article
-            key={i}
-            className="relative rounded-3xl p-8 flex flex-col justify-between 
-             bg-gradient-to-t from-cyan-500 via-blue-500 to-indigo-600
-             border border-white/20
-             shadow-xl
-             hover:shadow-2xl
-             transition-shadow duration-300"
-            variants={{
-              hidden: { opacity: 0, y: 30 },
-              visible: { opacity: 1, y: 0 },
-            }}
-          >
-            {service.popular && (
-              <span className="absolute -top-3 -right-3 bg-yellow-400 text-gray-900 text-sm font-bold px-3 py-1 rounded-full shadow-md">
-                Популярное
-              </span>
-            )}
-
-            <h3 className="text-2xl font-bold mb-6">{service.title}</h3>
-
-            <ul className="flex-1 text-gray-100 mb-6 space-y-3">
-              {service.includes.map((item, idx) => (
-                <li key={idx} className="flex items-start">
-                  <span className="inline-block w-2 h-2 bg-white rounded-full mr-3 mt-1 flex-shrink-0"></span>
-                  <span className="text-sm sm:text-base">{item}</span>
-                </li>
-              ))}
-            </ul>
-
-            <div className="border-t border-white/20 pt-4 flex flex-col items-center text-white font-semibold">
-              <span className="text-sm sm:text-base">{service.duration}</span>
-              <span className="text-lg text-center">{service.price}</span>
-            </div>
-          </motion.article>
-        ))}
-      </motion.div>
-    </section>
+    </div>
   );
-}
+};
