@@ -9,15 +9,25 @@ export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navLinks = [
-    { name: "Услуги", href: "/#services" },
-    { name: "Примеры проектов", href: "/#projects" },
-    { name: "Контакты", href: "/#contact" },
-    { name: "Цены и пакеты", href: "/#pricing" },
+    { name: "Услуги", href: "#services" },
+    { name: "Примеры проектов", href: "#projects" },
+    { name: "Контакты", href: "#contact" },
   ];
 
   const scrollToSection = (href: string) => {
     const element = document.querySelector(href);
-    if (element) element.scrollIntoView({ behavior: "smooth" });
+    if (!element) return;
+
+    const headerOffset = 80;
+    const elementPosition =
+      element.getBoundingClientRect().top + window.pageYOffset;
+    const offsetPosition = elementPosition - headerOffset;
+
+    window.scrollTo({
+      top: offsetPosition,
+      behavior: "smooth",
+    });
+
     setIsMobileMenuOpen(false);
   };
 
@@ -65,7 +75,7 @@ export function Header() {
                   <motion.a
                     href={link.href}
                     role="menuitem"
-                    className="relative text-gray-100 hover:text-cyan-400 transition-colors duration-200 group focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 rounded"
+                    className="relative text-gray-100 hover:text-cyan-400 transition-colors duration-200 group focus:outline-none rounded"
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.3, delay: index * 0.05 }}
@@ -91,7 +101,7 @@ export function Header() {
 
             {/* Кнопка мобильного меню */}
             <motion.button
-              className="md:hidden text-gray-100 hover:text-cyan-400 relative z-50 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 rounded"
+              className="md:hidden text-gray-100 hover:text-cyan-400 relative z-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus:ring-offset-2 rounded"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}

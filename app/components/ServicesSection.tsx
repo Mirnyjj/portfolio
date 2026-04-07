@@ -83,7 +83,10 @@ const services: Service[] = [
 
 export const ServicesSection = () => {
   return (
-    <div className="container min-h-svh place-content-center  px-6 text-white xl:px-12">
+    <section
+      id="services"
+      className="container min-h-svh place-content-center  px-6 text-white xl:px-12"
+    >
       <div className="grid md:grid-cols-2 md:gap-8 xl:gap-12 my-20">
         <div className="md:sticky top-20 self-start">
           <h2 className="mb-6 mt-4 text-4xl font-bold tracking-tight">
@@ -159,6 +162,6 @@ export const ServicesSection = () => {
           ))}
         </ContainerScroll>
       </div>
-    </div>
+    </section>
   );
 };

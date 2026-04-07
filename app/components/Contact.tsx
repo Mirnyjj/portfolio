@@ -42,7 +42,7 @@ export function Contact() {
   return (
     <section
       id="contact"
-      className="py-20 lg:py-32 bg-slate-950 relative overflow-hidden"
+      className="py-20 lg:py-32 bg-slate-950 relative overflow-hidden scroll-mt-20"
     >
       <motion.div
         className="absolute top-0 right-0 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl"

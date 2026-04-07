@@ -2,7 +2,7 @@
 
 import { Canvas } from "@react-three/fiber";
 import { Card } from "./CardUI";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { CardProps } from "@/app/types";
 
 export default function SceneChaosUI() {
