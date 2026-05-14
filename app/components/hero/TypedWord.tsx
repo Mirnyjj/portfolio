@@ -68,7 +68,7 @@ export default function TypedWord() {
         </motion.div>
       </div>
       <motion.a
-        href="#project"
+        href="#projects"
         className="relative px-8 py-4 top-10 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-lg font-semibold overflow-hidden group"
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
