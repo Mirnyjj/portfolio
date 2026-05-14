@@ -85,7 +85,14 @@ export const ServicesSection = () => {
   return (
     <section
       id="services"
-      className="container min-h-svh place-content-center  px-6 text-white xl:px-12"
+      className="
+        mx-auto
+        max-w-7xl
+        px-4 sm:px-6 lg:px-8
+        py-20
+        scroll-mt-20
+        text-white
+      "
     >
       <div className="grid md:grid-cols-2 md:gap-8 xl:gap-12 my-20">
         <div className="md:sticky top-20 self-start">

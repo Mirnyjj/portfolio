@@ -1,27 +1,9 @@
 "use client";
-import { useActionState, useState } from "react";
-import { AnimatePresence, motion } from "motion/react";
-import {
-  Mail,
-  Github,
-  Send,
-  MapPin,
-  CheckCircle2,
-  MailWarning,
-} from "lucide-react";
-import { sendContactMessage } from "../../lib/sendContactMessage";
-
-const initialState = {
-  success: false,
-};
+import { motion } from "motion/react";
+import { Mail, Github, Send, MapPin } from "lucide-react";
+import Script from "next/script";
 
 export function Contact() {
-  const [state, dispatchAction, isPending] = useActionState(
-    sendContactMessage,
-    initialState,
-  );
-  const [consentAgreed, setConsentAgreed] = useState(false);
-
   const socialLinks = [
     {
       name: "GitHub",
@@ -107,7 +89,18 @@ export function Contact() {
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              <form action={dispatchAction} className="space-y-6">
+              <Script
+                src="https://forms.yandex.ru/_static/embed.js"
+                strategy="afterInteractive"
+              />
+
+              <iframe
+                src="https://forms.yandex.ru/u/6a05ca3d50569004a10ebb2b?iframe=1"
+                name="ya-form-6a05ca3d50569004a10ebb2b"
+                frameBorder="0"
+                className="w-full"
+              />
+              {/* <form action={dispatchAction} className="space-y-6">
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -291,7 +284,7 @@ export function Contact() {
                     </motion.div>
                   )}
                 </AnimatePresence>
-              </form>
+              </form> */}
             </motion.div>
 
             <motion.div

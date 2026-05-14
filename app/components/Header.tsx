@@ -32,7 +32,7 @@ export function Header() {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50">
+    <header className="fixed top-0 left-0 right-0 z-20">
       <motion.nav
         className="bg-gray-900 transition-all duration-300"
         initial={{ y: -100 }}

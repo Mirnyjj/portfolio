@@ -7,7 +7,14 @@ export function Projects({ initialProjects }: { initialProjects: Project[] }) {
   return (
     <section
       id="projects"
-      className="container place-content-center my-20 px-6 text-white xl:px-12 scroll-mt-20"
+      className="
+        mx-auto
+        max-w-7xl
+        px-4 sm:px-6 lg:px-8
+        py-20
+        scroll-mt-20
+        text-white
+      "
     >
       <h2 className="mb-6 mt-4 text-4xl font-bold tracking-tight ">
         Реализованные проекты

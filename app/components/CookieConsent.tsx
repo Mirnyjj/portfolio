@@ -1,16 +1,20 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link";
 import { useEffect, useState } from "react";
+import { MetrikaProvider } from "./MetrikaProvider";
 
 export function CookieConsent() {
   const [isVisible, setIsVisible] = useState(false);
-  const [consentGiven, setConsentGiven] = useState(false);
+  const [consent, setConsent] = useState<boolean>(false);
 
   useEffect(() => {
     const saved = localStorage.getItem("cookie-consent");
+
     if (saved === "true") {
-      setConsentGiven(true);
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setConsent(true);
     } else {
       setIsVisible(true);
     }
@@ -18,92 +22,101 @@ export function CookieConsent() {
 
   const acceptCookies = () => {
     localStorage.setItem("cookie-consent", "true");
-
-    if (window.__METRIKA_CONSENT === false) {
-      delete window.__METRIKA_CONSENT;
-      if (window.ym)
-        window.ym(106326570, "init", {
-          ssr: true,
-          webvisor: true,
-          clickmap: true,
-          ecommerce: "dataLayer",
-          accurateTrackBounce: true,
-          trackLinks: true,
-        });
-    }
-
-    setConsentGiven(true);
+    setConsent(true);
     setIsVisible(false);
   };
 
   const declineCookies = () => {
     localStorage.setItem("cookie-consent", "false");
-    setConsentGiven(false);
+    setConsent(false);
     setIsVisible(false);
   };
 
-  if (!isVisible || consentGiven) return null;
-
   return (
-    <motion.div
-      className="fixed bottom-0 left-0 right-0 p-4 sm:p-6 mx-auto"
-      style={{
-        zIndex: 2147483647,
-        isolation: "isolate",
-      }}
-      data-animate="slide-up"
-    >
-      <div className="relative ">
-        <div
-          className="absolute inset-0 bg-cyan-500/20 backdrop-blur-2xl rounded-2xl -z-10 blur-xl"
-          style={{
-            maxWidth: 350,
-            margin: "auto",
-          }}
-        ></div>
+    <>
+      <MetrikaProvider enabled={consent} />
 
-        <div
-          className="bg-slate-900/90 backdrop-blur-xl rounded-2xl border border-white/20 shadow-2xl p-3 flex flex-col md:flex-row gap-4 md:gap-6 items-center relative z-10 "
-          style={{
-            maxWidth: 350,
-            margin: "auto",
-          }}
+      {isVisible && (
+        <motion.div
+          className="
+            fixed bottom-2 left-0 right-0 z-[10]
+            px-2 sm:px-4
+            flex justify-center
+          "
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
         >
-          <div className="flex flex-col text-white text-sm sm:text-base leading-relaxed justify-items-center text-center">
-            <p className="text-white mb-1">
-              Мы используем сервис{" "}
-              <strong className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 bg-clip-text text-transparent font-bold text-lg">
-                Яндекс.Метрика
-              </strong>{" "}
-              для улучшения работы сайта. Подробнее в{" "}
-              <a
-                href="/privacy"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-white/95 hover:text-white underline font-medium transition-all duration-200 bg-white/10 hover:bg-white/20 px-2 py-1 rounded-lg"
-              >
-                Политике конфиденциальности{" "}
-              </a>
-            </p>
-          </div>
+          <div className="relative w-full max-w-[400px]">
+            <div className="absolute inset-0 -z-10 rounded-2xl bg-cyan-500/20 blur-xl backdrop-blur-2xl" />
 
-          <div className="flex flex-wrap gap-3 justify-items-center">
-            <button
-              onClick={declineCookies}
-              className=" px-4 py-1 bg-blue-500 bg-gradient-to-r from-cyan-500/90 via-blue-500/95 to-purple-500/90 hover:from-cyan-600/95 hover:via-blue-600/95 hover:to-purple-600/95 hover:shadow-[0_0_25px_rgba(34,211,238,0.5)] text-white font-bold text-sm rounded-xl transition-all duration-300 hover:scale-[1.02] shadow-xl hover:shadow-2xl"
-            >
-              Отклонить
-            </button>
+            <div className="overflow-hidden rounded-2xl border border-white/20 bg-slate-900/90 backdrop-blur-xl shadow-2xl">
+              <div className="flex flex-col gap-4 p-4 sm:p-5">
+                <div className="text-center sm:text-left">
+                  <span className="text-sm font-semibold text-white">
+                    Мы используем cookies
+                  </span>
 
-            <button
-              onClick={acceptCookies}
-              className=" px-4 py-1 bg-blue-500 bg-gradient-to-r from-cyan-500/90 via-blue-500/95 to-purple-500/90 hover:from-cyan-600/95 hover:via-blue-600/95 hover:to-purple-600/95 hover:shadow-[0_0_25px_rgba(34,211,238,0.5)] text-white font-bold text-sm rounded-xl transition-all duration-300 hover:scale-[1.02] shadow-xl hover:shadow-2xl"
-            >
-              Принять cookies
-            </button>
+                  <p className="mt-2 text-sm leading-relaxed text-white/80">
+                    Это помогает улучшать сайт. Подробнее в{" "}
+                    <Link
+                      href="/privacy#cookies"
+                      className="
+              text-white
+              underline
+              underline-offset-4
+              hover:text-cyan-300
+              transition-colors
+            "
+                    >
+                      политике обработки cookies
+                    </Link>
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <button
+                    onClick={declineCookies}
+                    className="
+            h-7 rounded-xl
+            border border-white/20
+            bg-white/10
+            text-white
+            font-medium
+            backdrop-blur
+            transition-all duration-300
+            hover:bg-white/20
+            hover:scale-[1.02]
+          "
+                  >
+                    Отклонить
+                  </button>
+
+                  <button
+                    onClick={acceptCookies}
+                    className="
+            h-7 rounded-xl
+            text-white font-bold
+            bg-gradient-to-r
+            from-cyan-500/90
+            via-blue-500/95
+            to-purple-500/90
+            transition-all duration-300
+            hover:from-cyan-600/95
+            hover:via-blue-600/95
+            hover:to-purple-600/95
+            hover:scale-[1.02]
+            hover:shadow-[0_0_25px_rgba(34,211,238,0.5)]
+            shadow-xl
+          "
+                  >
+                    Принять
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-    </motion.div>
+        </motion.div>
+      )}
+    </>
   );
 }

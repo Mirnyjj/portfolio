@@ -16,7 +16,6 @@ export default function App() {
       />
       <Hero />
       <ServicesSection />
-
       <Projects initialProjects={PROJECTS} />
       <Contact />
     </div>
