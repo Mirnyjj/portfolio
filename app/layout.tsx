@@ -34,7 +34,7 @@ const jsonLd = {
   url: process.env.NEXT_PUBLIC_DOMAIN,
   image: `${process.env.NEXT_PUBLIC_DOMAIN}/136368953.jpg`,
   description:
-    "Frontend разработчик в России. Создаю современные веб-приложения на React, Next.js с интеграцией 1С, ИИ-чатботами и анимацией Framer Motion.",
+    "WEB разработчик. Создаю современные веб-приложения на React, Next.js с интеграцией 1С, ИИ-чатботами и анимацией Framer Motion.",
   sameAs: ["https://t.me/MaksimMirnyjj", "https://github.com/Mirnyjj"],
   knowsAbout: [
     "Next.js",
@@ -81,7 +81,7 @@ export const metadata: Metadata = {
         url: "/android-chrome-512x512.png",
         width: 512,
         height: 512,
-        alt: "Frontend разработка веб-приложений React Next.js",
+        alt: "Разработка веб-приложений React Next.js",
       },
     ],
     locale: "ru_RU",
