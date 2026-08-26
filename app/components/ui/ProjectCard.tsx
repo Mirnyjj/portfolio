@@ -154,7 +154,7 @@ export function ProjectCard({
         )}
       </AnimatePresence>
 
-      {/* CARD */}
+   
       <motion.div
         layoutId={`card-${project.title}-${id}`}
         onClick={() => setActive(true)}
@@ -165,7 +165,7 @@ export function ProjectCard({
         )}
       >
         <motion.div layoutId={`image-${project.title}-${id}`}>
-         // CARD
+   
 <div className="relative w-full aspect-[16/10] overflow-hidden rounded-t-xl bg-black/20">
   <Image
     src={project.image}
