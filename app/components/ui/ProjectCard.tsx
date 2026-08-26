@@ -77,15 +77,15 @@ export function ProjectCard({
             >
               {/* IMAGE */}
               <motion.div layoutId={`image-${project.title}-${id}`}>
-                <div className="relative w-full aspect-[16/10] overflow-hidden rounded-t-xl">
-                  <Image
-                    src={project.image}
-                    alt={project.title}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 100vw, 850px"
-                    priority={active}
-                  />
+               <div className="relative w-full max-h-[60vh] min-h-[300px] overflow-hidden rounded-t-xl bg-black/20">
+  <Image
+    src={project.image}
+    alt={project.title}
+    fill
+    className="object-contain"
+    sizes="(max-width: 768px) 100vw, 850px"
+    priority
+  />
                   <motion.button
                     layoutId={`button-${project.title}-${id}`}
                     onClick={() => setActive(false)}
@@ -165,16 +165,16 @@ export function ProjectCard({
         )}
       >
         <motion.div layoutId={`image-${project.title}-${id}`}>
-          <div className="relative w-full aspect-[16/10] overflow-hidden rounded-t-xl">
-            <Image
-              src={project.image}
-              alt={project.title}
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, 850px"
-              priority={active}
-            />
-          </div>
+         // CARD
+<div className="relative w-full aspect-[16/10] overflow-hidden rounded-t-xl bg-black/20">
+  <Image
+    src={project.image}
+    alt={project.title}
+    fill
+    className="object-contain"
+    sizes="(max-width: 768px) 100vw, 500px"
+  />
+</div>
         </motion.div>
 
         <div className="flex flex-col items-center mt-2 gap-2 p-3">
